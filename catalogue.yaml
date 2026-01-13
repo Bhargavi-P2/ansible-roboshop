@@ -1,6 +1,6 @@
 - name: configure catalogue component
   hosts: catalogue
-  became: yes
+  become: yes
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable node.js -y
@@ -20,10 +20,10 @@
 
   - name: create roboshop system user
     ansible.builtin.user:
-    name: roboshop
-    shell: /sbin/nologin
-    system: true
-    home: /app
+      name: roboshop
+      shell: /sbin/nologin
+      system: true
+      home: /app
 
   - name: download catalogue code
     ansible.builtin.get_url:
@@ -52,9 +52,9 @@
   
   - name: start and enable catalogue
     ansible.builtin.service:
-    name: catalogue
-    state: started
-    enabled: yes
+      name: catalogue
+      state: started
+      enabled: yes
   
   - name: copy mongodb repo
     ansible.builtin.copy:
@@ -72,7 +72,7 @@
 
   - name: print catalogue output
     ansible.builtin.debug:
-    msg: "{{ catalogue_output }}"
+      msg: "{{ catalogue_output }}"
 
   - name: load products
     ansible.builtin.shell: mongosh --host mongodb.bhargavi.xyz < /app/db/master-data.js
