@@ -48,7 +48,7 @@
 
   - name: daemon reload
     ansible.builtin.systemd_service:
-    daemon_reload: yes
+      daemon_reload: yes
 
   - name: enable and start shipping
     and.builtin.service:
@@ -67,4 +67,3 @@
       login_password: Roboshop@1
       login_host: mysql.bhargavi.xyz
       login_db: cities
-      
