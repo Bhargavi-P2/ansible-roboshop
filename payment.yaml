@@ -25,7 +25,7 @@
 
   - name: download payment code
     ansible.builtin.get_url:
-      url: https://payment-artifacts.s3.amazonaws.com/shipping-v3.zip
+      url: https://payment-artifacts.s3.amazonaws.com/payment-v3.zip
       dest: /tmp/payment.zip
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
   # remote_src: yes means files already exist in catalogue server
