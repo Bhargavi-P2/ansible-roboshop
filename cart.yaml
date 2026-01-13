@@ -1,6 +1,6 @@
 - name: configure cart component
   hosts: cart
-  became: yes
+  become: yes
   tasks:
   - name: disable default nodejs
     ansible.builtin.command: dnf module disable node.js -y
