@@ -1,41 +1,41 @@
 - name: configure user component
-  hoss: user
-  became: yes
+  hosts: user
+  become: yes
   tasks:
-  - name: disable default node.js
+  - name: disable default nodejs
     ansible.builtin.command: dnf module disable node.js -y
 
-  - name: enable default node.js
+  - name: enable default nodejs-20
     ansible.builtin.command: dnf module enable node.js:20 -y
   
   - name: Install nodejs
     ansible.builtin.dnf:
-    name: nodejs
-    state: present
+      name: nodejs
+      state: present
 
   - name: create roboshop system user
     ansible.builtin.user:
-    name: roboshop
-    shell: /sbin/nologin
-    system: true
-    home: /app
+      name: roboshop
+      shell: /sbin/nologin
+      system: true
+      home: /app
 
   - name: create app directory
     ansible.builtin.file:
-    path: /app
-    state: directory
+      path: /app
+      state: directory
 
   - name: download user code
     ansible.builtin.get_url:
-    url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
-    dest: /tmp/user.zip
+      url: https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip
+      dest: /tmp/user.zip
   # this module thinks file exist on ansible control server, needs to extract on to remote machine
   # remote_src: yes means files already exist in user server
   - name: extract user user code
     ansible.builtin.unarchive:
-    src: /tmp/user.zip
-    dest: /app
-    remote_src: yes
+      src: /tmp/user.zip
+      dest: /app
+      remote_src: yes
   
   - name: install dependencies
     community.general.npm:
@@ -52,9 +52,9 @@
   
   - name: start and enable user
     ansible.builtin.service:
-    name: user
-    state: started
-    enabled: yes
+      name: user
+      state: started
+      enabled: yes
   
 
   
