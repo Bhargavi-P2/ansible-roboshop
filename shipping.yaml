@@ -2,13 +2,21 @@
   hosts: shipping
   become: yes
   tasks:
-  - name: install maven
+  - name: install maven and mysql
     ansible.builtin.dnf:
       name: "{{ item }}"
       state: installed
     loop:
-      - PyMysql
-      - maven
+    - maven
+    - mysql
+    
+  - name: install PyMySQL and cryptography 
+    ansible.builtin.pip:
+      name: "{{ item }}"
+      executable: pip3.9
+    loop:
+    - cryptography
+    - PyMySQL
 
   - name: create app directory
     ansible.builtin.file:
@@ -64,9 +72,32 @@
       name: mysql
       state: installed
   
-  - name: connect to mysql using app user
-    community.mysql.mysql_info:
-      login_user: shipping
+  # - name: connect to mysql using app user
+  #   community.mysql.mysql_info:
+  #     login_user: shipping
+  #     login_password: Roboshop@1
+  #     login_host: mysql.bhargavi.xyz
+  #     login_db: cities
+
+  - name: import data
+    tags:
+    - import
+    community.mysql.mysql_db:
+      name: all
+      login_user: root
       login_password: Roboshop@1
       login_host: mysql.bhargavi.xyz
-      login_db: cities
+      state: import
+      target: "{{ item }}"
+    loop:
+    - /app/db/schema.sql
+    - /app/db/app-user.sql 
+    - /app/db/master-data.sql
+
+  - name: restart shipping
+    tags:
+    - import
+    ansible.builtin.service:
+      state: restarted
+      name: shipping
+  
